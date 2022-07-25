@@ -1,12 +1,5 @@
 # 포토그램 - 인스타그램 클론 코딩
 
-### STS 툴 버그가 발견되었습니다.
-- 아래 주소로 가서 4.0.6 버전으로 설치해주세요. 아니면 의존성 다운로드 79프로에서 무한루프가 발생합니다.
-- https://github.com/spring-projects/sts4/wiki/Previous-Versions
-
-### STS 툴에 세팅하기 - 플러그인 설정
-- https://blog.naver.com/getinthere/222322821611
-
 ### 의존성
 
 - Sring Boot DevTools
@@ -38,14 +31,6 @@
 </dependency>
 ```
 
-### 데이터베이스
-
-```sql
-create user 'cos'@'%' identified by 'cos1234';
-GRANT ALL PRIVILEGES ON *.* TO 'cos'@'%';
-create database photogram;
-```
-
 ### yml 설정
 
 ```yml
@@ -64,10 +49,10 @@ spring:
       suffix: .jsp
       
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/cos?serverTimezone=Asia/Seoul
-    username: cos
-    password: cos1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/photogram?serverTimezone=Asia/Seoul
+    username: 아이디
+    password: 비밀번호
     
   jpa:
     open-in-view: true
