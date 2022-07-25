@@ -15,19 +15,19 @@
 <body>
     <div class="container">
         <main class="loginMain">
-           <!--회원가입섹션-->
+            <!--회원가입섹션-->
             <section class="login">
                 <article class="login__form__container">
-                  
-                   <!--회원가입 폼-->
+
+                    <!--회원가입 폼-->
                     <div class="login__form">
                         <!--로고-->
                         <h1><img src="/images/logo.jpg" alt=""></h1>
-                         <!--로고end-->
-                         
-                         <!--회원가입 인풋-->
-                        <form class="login__input" >
-                            <input type="text" name="username" placeholder="유저네임" required="required" />
+                        <!--로고end-->
+
+                        <!--회원가입 인풋-->
+                        <form class="login__input" action="/auth/signup" method="POST" >
+                            <input type="text" name="username" placeholder="유저네임" required="required" maxlength="20"/>
                             <input type="password" name="password" placeholder="패스워드" required="required" />
                             <input type="email" name="email" placeholder="이메일" required="required" />
                             <input type="text" name="name" placeholder="이름" required="required" />
