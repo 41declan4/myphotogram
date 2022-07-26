@@ -22,7 +22,7 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("/auth/signin")
     public String signinForm() {
@@ -42,14 +42,14 @@ public class AuthController {
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
-                log.info(error.getDefaultMessage());
+                logger.info(error.getDefaultMessage());
             }
 
             throw new CustomValidationException("유효성 검사 실패", errorMap);
         } else {
             User user = signupDto.toEntity();
             User userEntity = authService.userSignup(user);
-            log.info(userEntity.toString());
+            logger.info(userEntity.toString());
 
             return "auth/signin";
         }
