@@ -23,7 +23,7 @@ public class Image extends BaseTimeEntity {
     private String postImageUrl; // 이미지 전송받아서 사진을 "서버" 특정 폴더에 저장 - DB에 그 저장된 경로를 INSERT
 
     @JoinColumn(name = "userId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     // 이미지 좋아요

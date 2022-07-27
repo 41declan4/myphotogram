@@ -1,12 +1,15 @@
 package com.cos.photogramstart.domain.user;
 
+import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.time.BaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -37,6 +40,10 @@ public class User extends BaseTimeEntity {
     private String gender;
     private String profileImageUrl;
     private String role;
+
+    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Image> images;
 
 
 }

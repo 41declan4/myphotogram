@@ -1,9 +1,12 @@
 package com.cos.photogramstart.web;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
+import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.service.ImageService;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class ImageController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     private final ImageService imageService;
 
     @GetMapping({"/", "/image/story"})
@@ -32,6 +36,11 @@ public class ImageController {
 
     @PostMapping("/image")
     public String imageUpload(ImageUploadDto imageUploadDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        if (imageUploadDto.getFile().isEmpty()) {
+            throw new CustomValidationException("이미지가 첨부되지 않았습니다.", null);
+        }
+
         // 서비스 호출
         imageService.imageUpload(imageUploadDto, principalDetails);
 

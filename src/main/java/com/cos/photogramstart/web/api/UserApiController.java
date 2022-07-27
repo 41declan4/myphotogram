@@ -30,15 +30,11 @@ public class UserApiController {
     @PutMapping("/api/user/{id}")
     public CMRespDto<?> update(@PathVariable int id, @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        logger.info(userUpdateDto.toString());
-        logger.info(bindingResult.toString());
-
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
-                logger.info(error.getDefaultMessage());
             }
 
             throw new CustomValidationApiException("유효성 검사 실패함", errorMap);
