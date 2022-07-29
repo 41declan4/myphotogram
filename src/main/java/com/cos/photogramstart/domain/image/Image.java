@@ -2,6 +2,7 @@ package com.cos.photogramstart.domain.image;
 
 import com.cos.photogramstart.domain.time.BaseTimeEntity;
 import com.cos.photogramstart.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class Image extends BaseTimeEntity {
     private String caption; // 사진 설명
     private String postImageUrl; // 이미지 전송받아서 사진을 "서버" 특정 폴더에 저장 - DB에 그 저장된 경로를 INSERT
 
+    @JsonIgnoreProperties({"images"})
     @JoinColumn(name = "userId")
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
