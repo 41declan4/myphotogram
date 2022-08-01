@@ -3,14 +3,21 @@ package com.cos.photogramstart.service;
 import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.web.dto.user.UserProfileDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
@@ -20,6 +27,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final SubscribeRepository subscribeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${file.path}") // yml의 file.path 경로
+    private String uploadFolder;
 
     @Transactional(readOnly = true)
     public UserProfileDto userProfile(int pageUserId, int principalId) {
@@ -70,6 +80,31 @@ public class UserService {
         userEntity.setBio(user.getBio());
         userEntity.setPhone(user.getPhone());
         userEntity.setGender(user.getGender());
+
+        return userEntity;
+    }
+
+    @Transactional
+    public User userProfileImageModify(int principalId, MultipartFile profileImageFile) {
+
+        UUID uuid = UUID.randomUUID();
+        String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
+
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        try {
+            Files.write(imageFilePath, profileImageFile.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        User userEntity = userRepository.findById(principalId).orElseThrow(new Supplier<CustomApiException>() {
+            @Override
+            public CustomApiException get() {
+                return new CustomApiException("유저를 찾을 수 없습니다.");
+            }
+        });
+        userEntity.setProfileImageUrl(imageFileName);
 
         return userEntity;
     }
