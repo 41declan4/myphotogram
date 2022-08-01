@@ -67,4 +67,10 @@ public class ImageService {
 
         return images;
     }
+
+    @Transactional(readOnly = true)
+    public List<Image> popularImg() {
+        return imageRepository.mPopular();
+    }
+
 }
