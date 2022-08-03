@@ -37,22 +37,11 @@ public class AuthController {
     @PostMapping("/auth/signup")
     public String signupProc(@Valid SignupDto signupDto, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
+        User user = signupDto.toEntity();
+        User userEntity = authService.userSignup(user);
+        logger.info(userEntity.toString());
 
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-                logger.info(error.getDefaultMessage());
-            }
-
-            throw new CustomValidationException("유효성 검사 실패", errorMap);
-        } else {
-            User user = signupDto.toEntity();
-            User userEntity = authService.userSignup(user);
-            logger.info(userEntity.toString());
-
-            return "auth/signin";
-        }
+        return "auth/signin";
 
     }
 }
