@@ -1,5 +1,6 @@
 package com.cos.photogramstart.domain.image;
 
+import com.cos.photogramstart.domain.comment.Comment;
 import com.cos.photogramstart.domain.likes.Likes;
 import com.cos.photogramstart.domain.time.BaseTimeEntity;
 import com.cos.photogramstart.domain.user.User;
@@ -42,4 +43,8 @@ public class Image extends BaseTimeEntity {
     private int likeCount;
 
     // 이미지 댓글
+    @OrderBy("id DESC")
+    @JsonIgnoreProperties({"image"})
+    @OneToMany(mappedBy = "image")
+    private List<Comment> comments;
 }
