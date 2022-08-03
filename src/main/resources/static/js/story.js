@@ -16,7 +16,7 @@ function storyLoad() {
 		url: `/api/image?page=${page}`,
 		dataType: 'json',
 	}).done(res => {
-		console.log(res);
+		// console.log(res);
 		res.data.content.forEach((image) => {
 			let storyItem = getStoryItem(image);
 			$('#storyList').append(storyItem);
@@ -64,7 +64,7 @@ function getStoryItem(image) {
 						<p>${image.caption}</p>
 					</div>
 
-					<div id="storyCommentList-1">
+					<div id="storyCommentList-${image.id}">
 
 						<div class="sl__item__contents__comment" id="storyCommentItem-1"">
 							<p>
@@ -80,8 +80,8 @@ function getStoryItem(image) {
 					</div>
 
 					<div class="sl__item__input">
-						<input type="text" placeholder="댓글 달기..." id="storyCommentInput-1" />
-						<button type="button" onClick="addComment()">게시</button>
+						<input type="text" placeholder="댓글 달기..." id="storyCommentInput-${image.id}" />
+						<button type="button" onClick="addComment(${image.id})">게시</button>
 					</div>
 
 				</div>
@@ -93,9 +93,9 @@ function getStoryItem(image) {
 
 // (2) 스토리 스크롤 페이징하기
 $(window).scroll(() => {
-	console.log('윈도우 scrollTop', $(window).scrollTop());
-	console.log('문서의 높이', $(document).height());
-	console.log('윈도우 높이', $(window).height());
+	// console.log('윈도우 scrollTop', $(window).scrollTop());
+	// console.log('문서의 높이', $(document).height());
+	// console.log('윈도우 높이', $(window).height());
 
 	let checkNum = $(window).scrollTop() - ($(document).height() - $(window).height());
 	console.log(checkNum);
@@ -153,12 +153,13 @@ function toggleLike(imageId) {
 }
 
 // (4) 댓글쓰기
-function addComment() {
+function addComment(imageId) {
 
-	let commentInput = $("#storyCommentInput-1");
-	let commentList = $("#storyCommentList-1");
+	let commentInput = $(`#storyCommentInput-${imageId}`);
+	let commentList = $(`#storyCommentList-${imageId}`);
 
 	let data = {
+		imageId: imageId,
 		content: commentInput.val()
 	}
 
@@ -166,6 +167,18 @@ function addComment() {
 		alert("댓글을 작성해주세요!");
 		return;
 	}
+
+	$.ajax({
+		type: 'POST',
+		url: `/api/comment`,
+		data: JSON.stringify(data),
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json'
+	}).done(res => {
+		console.log("성공", res);
+	}).fail(e => {
+		console.log("오류", e);
+	});
 
 	let content = `
 				<div class="sl__item__contents__comment" id="storyCommentItem-2""> 
